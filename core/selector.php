@@ -236,7 +236,7 @@ class selector
         }
         else 
         {
-            for ($i = 1; $i < $count; $i++) 
+            for ($i = 0; $i < $count; $i++) 
             {
                 // 如果只有一个元素，就直接返回好了
                 $result[] = count($out[$i]) > 1 ? $out[$i] : $out[$i][0];
@@ -246,7 +246,7 @@ class selector
         {
             return null;
         }
-        
+
         return count($result) > 1 ? $result : $result[0];
     }
 
