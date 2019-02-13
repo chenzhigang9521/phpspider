@@ -46,9 +46,8 @@
 
 namespace phpspider\core;
 
-if (!function_exists('curl_file_create')) 
-{
-    function curl_file_create($filename, $mimetype = '', $postname = '') 
+if (!function_exists('curl_file_create')) {
+    function curl_file_create($filename, $mimetype = '', $postname = '')
     {
         return "@$filename;filename="
             . ($postname ?: basename($filename))
@@ -103,14 +102,14 @@ class requests
     /**
      * 设置代理
      * 如果代理有多个，请求时会随机使用
-     * 
+     *
      * @param mixed $proxies
      * array (
      *    'socks5://user1:pass2@host:port',
      *    'socks5://user2:pass2@host:port'
      *)
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2016-09-18 10:17
      */
     public static function set_proxy($proxy)
@@ -121,9 +120,9 @@ class requests
     /**
      * 删除代理
      * 因为每个链接信息里面都有代理信息，有的链接需要，有的不需要，所以必须提供一个删除功能
-     * 
+     *
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2018-07-16 17:59
      */
     public static function del_proxy()
@@ -152,16 +151,12 @@ class requests
      */
     public static function set_cookie($key, $value, $domain = '')
     {
-        if (empty($key)) 
-        {
+        if (empty($key)) {
             return false;
         }
-        if (!empty($domain)) 
-        {
+        if (!empty($domain)) {
             self::$domain_cookies[$domain][$key] = $value;
-        }
-        else 
-        {
+        } else {
             self::$cookies[$key] = $value;
         }
         return true;
@@ -169,33 +164,28 @@ class requests
 
     /**
      * 批量设置全局cookie
-     * 
+     *
      * @param mixed $cookies
      * @param string $domain
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function set_cookies($cookies, $domain = '')
     {
         $cookies_arr = explode(';', $cookies);
-        if (empty($cookies_arr))
-        {
+        if (empty($cookies_arr)) {
             return false;
         }
 
-        foreach ($cookies_arr as $cookie) 
-        {
+        foreach ($cookies_arr as $cookie) {
             $cookie_arr = explode('=', $cookie, 2);
             $key        = $cookie_arr[0];
             $value      = empty($cookie_arr[1]) ? '' : $cookie_arr[1];
 
-            if (!empty($domain)) 
-            {
+            if (!empty($domain)) {
                 self::$domain_cookies[$domain][$key] = $value;
-            }
-            else 
-            {
+            } else {
                 self::$cookies[$key] = $value;
             }
         }
@@ -204,17 +194,16 @@ class requests
 
     /**
      * 获取单一Cookie
-     * 
+     *
      * @param mixed $name    cookie名称
      * @param string $domain 不传则取全局cookie，就是手动set_cookie的cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function get_cookie($name, $domain = '')
     {
-        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) 
-        {
+        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) {
             return '';
         }
         $cookies = empty($domain) ? self::$cookies : self::$domain_cookies[$domain];
@@ -223,16 +212,15 @@ class requests
     
     /**
      * 获取Cookie数组
-     * 
+     *
      * @param string $domain 不传则取全局cookie，就是手动set_cookie的cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function get_cookies($domain = '')
     {
-        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) 
-        {
+        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) {
             return array();
         }
         return empty($domain) ? self::$cookies : self::$domain_cookies[$domain];
@@ -240,35 +228,28 @@ class requests
 
     /**
      * 删除Cookie
-     * 
+     *
      * @param string $domain  不传则删除全局Cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function del_cookie($key, $domain = '')
     {
-        if (empty($key)) 
-        {
+        if (empty($key)) {
             return false;
         }
 
-        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) 
-        {
+        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) {
             return false;
         }
 
-        if (!empty($domain)) 
-        {
-            if (isset(self::$domain_cookies[$domain][$key])) 
-            {
+        if (!empty($domain)) {
+            if (isset(self::$domain_cookies[$domain][$key])) {
                 unset(self::$domain_cookies[$domain][$key]);
             }
-        }
-        else 
-        {
-            if (isset(self::$cookies[$key])) 
-            {
+        } else {
+            if (isset(self::$cookies[$key])) {
                 unset(self::$cookies[$key]);
             }
         }
@@ -277,26 +258,21 @@ class requests
 
     /**
      * 删除Cookie
-     * 
+     *
      * @param string $domain  不传则删除全局Cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function del_cookies($domain = '')
     {
-        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) 
-        {
+        if (!empty($domain) && !isset(self::$domain_cookies[$domain])) {
             return false;
         }
-        if ( empty($domain) ) 
-        {
+        if (empty($domain)) {
             self::$cookies = array();
-        }
-        else 
-        {
-            if (isset(self::$domain_cookies[$domain])) 
-            {
+        } else {
+            if (isset(self::$domain_cookies[$domain])) {
                 unset(self::$domain_cookies[$domain]);
             }
         }
@@ -336,9 +312,9 @@ class requests
 
     /**
      * 删除伪造IP
-     * 
+     *
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2018-07-16 17:59
      */
     public static function del_client_ip()
@@ -348,7 +324,7 @@ class requests
 
     /**
      * 设置中文请求
-     * 
+     *
      * @param string $lang
      * @return void
      */
@@ -374,9 +350,9 @@ class requests
      * 分割返回的header和body
      * header用来判断编码和获取Cookie
      * body用来判断编码，得到编码前和编码后的内容
-     * 
+     *
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function split_header_body()
@@ -391,20 +367,20 @@ class requests
 
         //$http_headers = array();
         //// 解析HTTP数据流
-        //if (!empty(self::$raw)) 
+        //if (!empty(self::$raw))
         //{
             //self::get_response_cookies($domain);
             //// body里面可能有 \r\n\r\n，但是第一个一定是HTTP Header，去掉后剩下的就是body
             //$array = explode("\r\n\r\n", self::$raw);
-            //foreach ($array as $k=>$v) 
+            //foreach ($array as $k=>$v)
             //{
                 //// post 方法会有两个http header：HTTP/1.1 100 Continue、HTTP/1.1 200 OK
-                //if (preg_match("#^HTTP/.*? 100 Continue#", $v)) 
+                //if (preg_match("#^HTTP/.*? 100 Continue#", $v))
                 //{
                     //unset($array[$k]);
                     //continue;
                 //}
-                //if (preg_match("#^HTTP/.*? \d+ #", $v)) 
+                //if (preg_match("#^HTTP/.*? \d+ #", $v))
                 //{
                     //$header = $v;
                     //unset($array[$k]);
@@ -426,11 +402,11 @@ class requests
 
     /**
      * 获得域名相对应的Cookie
-     * 
+     *
      * @param mixed $header
      * @param mixed $domain
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function get_response_cookies($header, $domain)
@@ -440,26 +416,21 @@ class requests
         $cookies = empty($matches[1]) ? array() : $matches[1];
 
         // 解析到Cookie
-        if (!empty($cookies)) 
-        {
+        if (!empty($cookies)) {
             $cookies = implode(';', $cookies);
             $cookies = explode(';', $cookies);
-            foreach ($cookies as $cookie)
-            {
+            foreach ($cookies as $cookie) {
                 $cookie_arr = explode('=', $cookie, 2);
                 // 过滤 httponly、secure
-                if (count($cookie_arr) < 2) 
-                {
+                if (count($cookie_arr) < 2) {
                     continue;
                 }
                 $cookie_name = !empty($cookie_arr[0]) ? trim($cookie_arr[0]) : '';
-                if (empty($cookie_name)) 
-                {
+                if (empty($cookie_name)) {
                     continue;
                 }
                 // 过滤掉domain路径
-                if (in_array(strtolower($cookie_name), array('path', 'domain', 'expires', 'max-age'))) 
-                {
+                if (in_array(strtolower($cookie_name), array('path', 'domain', 'expires', 'max-age'))) {
                     continue;
                 }
                 self::$domain_cookies[$domain][trim($cookie_arr[0])] = trim($cookie_arr[1]);
@@ -470,25 +441,22 @@ class requests
     /**
      * 获得response header
      * 此方法占时没有用到
-     * 
+     *
      * @param mixed $header
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function get_response_headers($header)
     {
         $headers = array();
         $header_lines = explode("\n", $header);
-        if (!empty($header_lines)) 
-        {
-            foreach ($header_lines as $line) 
-            {
+        if (!empty($header_lines)) {
+            foreach ($header_lines as $line) {
                 $header_arr = explode(':', $line, 2);
                 $key        = empty($header_arr[0]) ? '' : trim($header_arr[0]);
                 $val        = empty($header_arr[1]) ? '' : trim($header_arr[1]);
-                if (empty($key) || empty($val))
-                {
+                if (empty($key) || empty($val)) {
                     continue;
                 }
                 $headers[$key] = $val;
@@ -521,15 +489,14 @@ class requests
     
     /**
      * 简单的判断一下参数是否为一个URL链接
-     * @param  string  $str 
-     * @return boolean      
+     * @param  string  $str
+     * @return boolean
      */
     private static function _is_url($url)
     {
         //$pattern = '/^http(s)?:\\/\\/.+/';
         $pattern = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
-        if (preg_match($pattern, $url)) 
-        {
+        if (preg_match($pattern, $url)) {
             return true;
         }
         return false;
@@ -541,26 +508,22 @@ class requests
      */
     public static function init()
     {
-        if (!is_resource ( self::$ch ))
-        {
-            self::$ch = curl_init ();
-            curl_setopt( self::$ch, CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( self::$ch, CURLOPT_HEADER, false );
-            curl_setopt( self::$ch, CURLOPT_USERAGENT, "phpspider-requests/".self::VERSION );
+        if (!is_resource(self::$ch)) {
+            self::$ch = curl_init();
+            curl_setopt(self::$ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt(self::$ch, CURLOPT_HEADER, false);
+            curl_setopt(self::$ch, CURLOPT_USERAGENT, "phpspider-requests/".self::VERSION);
             // 如果设置了两个时间，就分开设置
-            if (is_array(self::$timeout)) 
-            {
-                curl_setopt( self::$ch, CURLOPT_CONNECTTIMEOUT, self::$timeout[0] );
-                curl_setopt( self::$ch, CURLOPT_TIMEOUT, self::$timeout[1]);
-            }
-            else 
-            {
+            if (is_array(self::$timeout)) {
+                curl_setopt(self::$ch, CURLOPT_CONNECTTIMEOUT, self::$timeout[0]);
+                curl_setopt(self::$ch, CURLOPT_TIMEOUT, self::$timeout[1]);
+            } else {
                 curl_setopt(self::$ch, CURLOPT_CONNECTTIMEOUT, ceil(self::$timeout / 2));
                 curl_setopt(self::$ch, CURLOPT_TIMEOUT, self::$timeout);
             }
             curl_setopt(self::$ch, CURLOPT_MAXREDIRS, 5); //maximum number of redirects allowed
             // 在多线程处理场景下使用超时选项时，会忽略signals对应的处理函数，但是无耐的是还有小概率的crash情况发生
-            curl_setopt( self::$ch, CURLOPT_NOSIGNAL, true);
+            curl_setopt(self::$ch, CURLOPT_NOSIGNAL, true);
         }
         return self::$ch;
     }
@@ -568,98 +531,97 @@ class requests
     /**
      * get 请求
      */
-    public static function get($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function get($url, $fields = array(), $allow_redirects = true, $cert = null, $header = '')
     {
-        self::init ();
-        return self::request($url, 'get', $fields, NULL, $allow_redirects, $cert);
+        self::init();
+        return self::request($url, 'get', $fields, null, $allow_redirects, $cert, $header);
     }
 
     /**
      * post 请求
      * $fields 有三种类型:1、数组；2、http query；3、json
-     * 1、array('name'=>'yangzetao') 
-     * 2、http_build_query(array('name'=>'yangzetao')) 
+     * 1、array('name'=>'yangzetao')
+     * 2、http_build_query(array('name'=>'yangzetao'))
      * 3、json_encode(array('name'=>'yangzetao'))
      * 前两种是普通的post，可以用$_POST方式获取
      * 第三种是post stream( json rpc，其实就是webservice )
-     * 虽然是post方式，但是只能用流方式 http://input 后者 $HTTP_RAW_POST_DATA 获取 
-     * 
-     * @param mixed $url 
-     * @param array $fields 
-     * @param mixed $proxies 
+     * 虽然是post方式，但是只能用流方式 http://input 后者 $HTTP_RAW_POST_DATA 获取
+     *
+     * @param mixed $url
+     * @param array $fields
+     * @param mixed $proxies
      * @static
      * @access public
      * @return void
      */
-    public static function post($url, $fields = array(), $files = array(), $allow_redirects = true, $cert = NULL)
+    public static function post($url, $fields = array(), $files = array(), $allow_redirects = true, $cert = null, $header = '')
     {
-        self::init ();
-        return self::request($url, 'POST', $fields, $files, $allow_redirects, $cert);
+        self::init();
+        return self::request($url, 'POST', $fields, $files, $allow_redirects, $cert, $header);
     }
 
-    public static function put($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function put($url, $fields = array(), $allow_redirects = true, $cert = null)
     {
-        self::init ();
+        self::init();
         return self::request($url, 'PUT', $fields, $allow_redirects, $cert);
     }
 
-    public static function delete($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function delete($url, $fields = array(), $allow_redirects = true, $cert = null)
     {
-        self::init ();
+        self::init();
         return self::request($url, 'DELETE', $fields, $allow_redirects, $cert);
     }
 
     // 响应HTTP头域里的元信息
     // 此方法被用来获取请求实体的元信息而不需要传输实体主体（entity-body）
     // 此方法经常被用来测试超文本链接的有效性，可访问性，和最近的改变。.
-    public static function head($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function head($url, $fields = array(), $allow_redirects = true, $cert = null)
     {
-        self::init ();
+        self::init();
         self::request($url, 'HEAD', $fields, $allow_redirects, $cert);
     }
 
-    public static function options($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function options($url, $fields = array(), $allow_redirects = true, $cert = null)
     {
-        self::init ();
+        self::init();
         return self::request($url, 'OPTIONS', $fields, $allow_redirects, $cert);
     }
 
-    public static function patch($url, $fields = array(), $allow_redirects = true, $cert = NULL)
+    public static function patch($url, $fields = array(), $allow_redirects = true, $cert = null)
     {
-        self::init ();
+        self::init();
         return self::request($url, 'PATCH', $fields, $allow_redirects, $cert);
     }
 
     /**
      * request
-     * 
+     *
      * @param mixed $url        请求URL
      * @param string $method    请求方法
      * @param array $fields     表单字段
      * @param array $files      上传文件
      * @param mixed $cert       CA证书
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
-    public static function request($url, $method = 'GET', $fields = array(), $files = array(), $allow_redirects = true, $cert = NULL)
+    public static function request($url, $method = 'GET', $fields = array(), $files = array(), $allow_redirects = true, $cert = null, $header = '')
     {
+        self::$rawheaders = [];
+        !empty($header) && self::$rawheaders = $header;
         $method = strtoupper($method);
-        if(!self::_is_url($url))
-        {
+        if (!self::_is_url($url)) {
             self::$error = "You have requested URL ({$url}) is not a valid HTTP address";
             return false;
         }
 
         // 如果是 get 方式，直接拼凑一个 url 出来
-        if ($method == 'GET' && !empty($fields)) 
-        {
-            $url = $url.(strpos($url, '?') === false ? '?' : '&').http_build_query($fields);
+        if ($method == 'GET' && !empty($fields)) {
+            $url = $url . (strpos($url, '?') === false ? '?' : '&') . http_build_query($fields);
         }
 
         $parse_url = parse_url($url);
-        if (empty($parse_url) || empty($parse_url['host']) || !in_array($parse_url['scheme'], array('http', 'https'))) 
-        {
+        if (empty($parse_url) || empty($parse_url['host']) || !in_array($parse_url['scheme'], array('http', 'https'))) {
             self::$error = "No connection adapters were found for '{$url}'";
             return false;
         }
@@ -667,10 +629,8 @@ class requests
         $domain = $parse_url['host'];
 
         // 随机绑定 hosts，做负载均衡
-        if (self::$hosts) 
-        {
-            if (isset(self::$hosts[$domain]))
-            {
+        if (self::$hosts) {
+            if (isset(self::$hosts[$domain])) {
                 $hosts = self::$hosts[$domain];
                 $key = rand(0, count($hosts)-1);
                 $ip = $hosts[$key];
@@ -679,37 +639,29 @@ class requests
             }
         }
 
-        curl_setopt( self::$ch, CURLOPT_URL, $url );
+        curl_setopt(self::$ch, CURLOPT_URL, $url);
 
-        if ($method != 'GET')
-        {
+        if ($method != 'GET') {
             // 如果是 post 方式
-            if ($method == 'POST')
-            {
+            if ($method == 'POST') {
                 //curl_setopt( self::$ch, CURLOPT_POST, true );
                 $tmpheaders = array_change_key_case(self::$rawheaders, CASE_LOWER);
                 // 有些RESTful服务只接受JSON形态的数据
                 // CURLOPT_POST会把上傳的文件类型设为 multipart/form-data
                 // 把CURLOPT_POSTFIELDS的内容按multipart/form-data 的形式编码
                 // CURLOPT_CUSTOMREQUEST可以按指定内容上传
-                if ( isset($tmpheaders['content-type']) && $tmpheaders['content-type'] == 'application/json' ) 
-                {
-                    curl_setopt( self::$ch, CURLOPT_CUSTOMREQUEST, $method ); 
-                }
-                else 
-                {
-                    curl_setopt( self::$ch, CURLOPT_POST, true );
+                if (isset($tmpheaders['content-type']) && strstr($tmpheaders['content-type'], 'application/json')) {
+                    curl_setopt(self::$ch, CURLOPT_CUSTOMREQUEST, $method);
+                } else {
+                    curl_setopt(self::$ch, CURLOPT_POST, true);
                 }
 
                 $file_fields = array();
-                if (!empty($files)) 
-                {
-                    foreach ($files as $postname => $file) 
-                    {
+                if (!empty($files)) {
+                    foreach ($files as $postname => $file) {
                         $filepath = realpath($file);
                         // 如果文件不存在
-                        if (!file_exists($filepath)) 
-                        {
+                        if (!file_exists($filepath)) {
                             continue;
                         }
 
@@ -720,40 +672,30 @@ class requests
                         //$cfile = '@'.realpath($filename).";type=".$type.";filename=".$filename;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 self::$rawheaders['X-HTTP-Method-Override'] = $method;
-                curl_setopt( self::$ch, CURLOPT_CUSTOMREQUEST, $method ); 
+                curl_setopt(self::$ch, CURLOPT_CUSTOMREQUEST, $method);
             }
 
-            if ( $method == 'POST' ) 
-            {
+            if ($method == 'POST') {
                 // 不是上传文件的，用http_build_query, 能实现更好的兼容性，更小的请求数据包
-                if ( empty($file_fields) ) 
-                {
+                if (empty($file_fields)) {
                     // post方式
-                    if ( is_array($fields) ) 
-                    {
+                    if (is_array($fields)) {
                         $fields = http_build_query($fields);
                     }
-                }
-                else 
-                {
+                } else {
                     // 有post数据
-                    if ( is_array($fields) && !empty($fields) ) 
-                    {
+                    if (is_array($fields) && !empty($fields)) {
                         // 某些server可能会有问题
                         $fields = array_merge($fields, $file_fields);
-                    }
-                    else 
-                    {
+                    } else {
                         $fields = $file_fields;
                     }
                 }
 
                 // 不能直接传数组，不知道是什么Bug，会非常慢
-                curl_setopt( self::$ch, CURLOPT_POSTFIELDS, $fields );
+                curl_setopt(self::$ch, CURLOPT_POSTFIELDS, $fields);
             }
         }
 
@@ -761,77 +703,67 @@ class requests
         $domain_cookies = self::get_cookies($domain);
         $cookies =  array_merge($cookies, $domain_cookies);
         // 是否设置了cookie
-        if (!empty($cookies)) 
-        {
-            foreach ($cookies as $key=>$value) 
-            {
+        if (!empty($cookies)) {
+            foreach ($cookies as $key => $value) {
                 $cookie_arr[] = $key.'='.$value;
             }
             $cookies = implode('; ', $cookie_arr);
             curl_setopt(self::$ch, CURLOPT_COOKIE, $cookies);
         }
 
-        if (!empty(self::$useragents)) 
-        {
+        if (!empty(self::$useragents)) {
             $key = rand(0, count(self::$useragents) - 1);
             self::$rawheaders['User-Agent'] = self::$useragents[$key];
         }
 
-        if (!empty(self::$client_ips)) 
-        {
+        if (!empty(self::$client_ips)) {
             $key                                 = rand(0, count(self::$client_ips) - 1);
             self::$rawheaders['CLIENT-IP']       = self::$client_ips[$key];
             self::$rawheaders['X-FORWARDED-FOR'] = self::$client_ips[$key];
         }
 
-        if (self::$rawheaders)
-        {
+        if (self::$rawheaders) {
             $http_headers = array();
-            foreach (self::$rawheaders as $k=>$v) 
-            {
-                $http_headers[] = $k.': '.$v;
+            foreach (self::$rawheaders as $k => $v) {
+                $http_headers[] = $k . ': ' . $v;
             }
-            curl_setopt( self::$ch, CURLOPT_HTTPHEADER, $http_headers );
+            curl_setopt(self::$ch, CURLOPT_HTTPHEADER, $http_headers);
         }
 
-        curl_setopt( self::$ch, CURLOPT_ENCODING, 'gzip' );
+        curl_setopt(self::$ch, CURLOPT_ENCODING, 'gzip');
 
         // 关闭验证
-        if ($scheme == 'https') 
-        {
+        if ($scheme == 'https') {
             curl_setopt(self::$ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt(self::$ch, CURLOPT_SSL_VERIFYHOST, false);
         }
 
-        if (self::$proxies)
-        {
+        if (self::$proxies) {
             $key = rand(0, count(self::$proxies) - 1);
             $proxy = self::$proxies[$key];
-            curl_setopt( self::$ch, CURLOPT_PROXY, $proxy );
+            curl_setopt(self::$ch, CURLOPT_PROXY, $proxy);
         }
 
         // header + body，header 里面有 cookie
-        curl_setopt( self::$ch, CURLOPT_HEADER, true );
+        curl_setopt(self::$ch, CURLOPT_HEADER, true);
         // 请求跳转后的内容
-        if ($allow_redirects)
-        {
-            curl_setopt( self::$ch, CURLOPT_FOLLOWLOCATION, true);
+        if ($allow_redirects) {
+            curl_setopt(self::$ch, CURLOPT_FOLLOWLOCATION, true);
         }
 
-        self::$raw = curl_exec ( self::$ch );
+        self::$raw = curl_exec(self::$ch);
         // 真实url
         //$location = curl_getinfo( self::$ch, CURLINFO_EFFECTIVE_URL);
-        self::$info = curl_getinfo( self::$ch );
+        self::$info = curl_getinfo(self::$ch);
         //print_r(self::$info);
         self::$status_code = self::$info['http_code'];
-        if (self::$raw === false)
-        {
-            self::$error = 'Curl error: ' . curl_error( self::$ch );
+        if (self::$raw === false) {
+            self::$error = 'Curl error: ' . curl_error(self::$ch);
             //trigger_error(self::$error, E_USER_WARNING);
         }
 
         // 关闭句柄
-        curl_close( self::$ch );
+        curl_close(self::$ch);
 
         // 请求成功之后才把URL存起来
         list($header, $text) = self::split_header_body();
@@ -847,11 +779,9 @@ class requests
     {
         $status_code = 0;
         $lines = explode("\n", $header);
-        foreach ($lines as $line) 
-        {
+        foreach ($lines as $line) {
             $line = trim($line);
-            if (preg_match("#^HTTP/.*? (\d+) Found#", $line, $out))
-            {
+            if (preg_match("#^HTTP/.*? (\d+) Found#", $line, $out)) {
                 $status_code = empty($out[1]) ? 0 : intval($out[1]);
             }
         }
@@ -872,11 +802,11 @@ class requests
     /**
      * 拼凑文件和表单
      * 占时没有用到
-     * 
+     *
      * @param mixed $post_fields
      * @param mixed $file_fields
      * @return void
-     * @author seatle <seatle@foxmail.com> 
+     * @author seatle <seatle@foxmail.com>
      * @created time :2017-08-03 18:06
      */
     public static function get_postfile_form($post_fields, $file_fields)
@@ -885,8 +815,7 @@ class requests
         $data = '';
         $delimiter = '-------------' . uniqid();
         // 表单数据
-        foreach ($post_fields as $name => $content) 
-        {
+        foreach ($post_fields as $name => $content) {
             $data .= '--'.$delimiter."\r\n";
             $data .= 'Content-Disposition: form-data; name = "'.$name.'"';
             $data .= "\r\n\r\n";
@@ -894,8 +823,7 @@ class requests
             $data .= "\r\n";
         }
 
-        foreach ($file_fields as $input_name => $file) 
-        {
+        foreach ($file_fields as $input_name => $file) {
             $data .= '--'.$delimiter."\r\n";
             $data .= 'Content-Disposition: form-data; name = "'.$input_name.'";'.
                 ' filename="'.$file['filename'].'"'."\r\n";
@@ -937,55 +865,40 @@ class requests
             'iconv',
             'mb_convert_encoding',
         );
-        if (isset(self::$output_encoding))
-        {
+        if (isset(self::$output_encoding)) {
             $out = self::$output_encoding;
         }
-        if ( ! isset($out))
-        {
+        if (! isset($out)) {
             $out = 'UTF-8';
         }
-        if ( ! in_array($mode, $valid))
-        {
+        if (! in_array($mode, $valid)) {
             throw new Exception('invalid mode, mode='.$mode);
         }
         $if = function_exists('mb_convert_encoding');
         $if = $if && ($mode == 'auto' || $mode == 'mb_convert_encoding');
-        if (function_exists('iconv') && ($mode == 'auto' || $mode == 'iconv'))
-        {
+        if (function_exists('iconv') && ($mode == 'auto' || $mode == 'iconv')) {
             $func = 'iconv';
-        }
-        elseif ($if)
-        {
+        } elseif ($if) {
             $func = 'mb_convert_encoding';
-        }
-        else
-        {
+        } else {
             throw new Exception('charsetTrans failed, no function');
         }
 
         $pattern = '/(<meta[^>]*?charset=([\"\']?))([a-z\d_\-]*)(\2[^>]*?>)/is';
-        if ( ! isset($in))
-        {
+        if (! isset($in)) {
             $n = preg_match($pattern, $html, $in);
-            if ($n > 0)
-            {
+            if ($n > 0) {
                 $in = $in[3];
-            }
-            else
-            {
+            } else {
                 $in = null;
             }
-            if (empty($in) and function_exists('mb_detect_encoding'))
-            {
+            if (empty($in) and function_exists('mb_detect_encoding')) {
                 $in = mb_detect_encoding($html, array('UTF-8', 'GBK', 'GB2312', 'LATIN1', 'ASCII', 'BIG5', 'ISO-8859-1'));
             }
         }
 
-        if (isset($in))
-        {
-            if ($in == 'ISO-8859-1')
-            {
+        if (isset($in)) {
+            if ($in == 'ISO-8859-1') {
                 $in = 'UTF-8';
             }
             $old  = error_reporting(error_reporting() & ~E_NOTICE);

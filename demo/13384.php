@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/../autoloader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 use phpspider\core\phpspider;
 use phpspider\core\requests;
 use phpspider\core\db;
-use phpspider\core\selector;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -13,35 +13,6 @@ use phpspider\core\selector;
 //$info = requests::$info;
 //print_r($info);
 //exit;
-// $login_url = "https://seller.ofashion.com.cn/account/login";
-$login_url = "https://login.taobao.com/member/login.jhtml?redirectURL=https%3A%2F%2Fi.taobao.com%2Fmy_taobao.htm%3Fspm%3Da21bo.2017.754894437.3.5af911d9wKuj4k%26ad_id%3D%26am_id%3D%26cm_id%3D%26pm_id%3D1501036000a02c5c3739";
-$html = requests::get($login_url);
-// $content = selector::select($html, '/<meta name="_xcs_val" content="\S+">/', 'regex');
-// $content = selector::select($content, '/content="\S+"/', 'regex');
-// $content = str_replace(['"', 'content='], '', $content);
-$content = selector::select($html, '/<input id="J_NcoToken" type="hidden" name="ncoToken"\s+value="\S+" \/>/', 'regex');
-$content = selector::select($content, '/value="\S+"/', 'regex');
-$content = str_replace(['"', 'value='], '', $content);
-$login_url = "https://login.taobao.com/member/login.jhtml?redirectURL=https%3A%2F%2Fwww.taobao.com%2F";
-// 提交的参数
-$params = array(
-    "TPL_username" => $content,
-    "TPL_username" => "18811751516",
-    "TPL_password" => "woshixiaol",
-    "ncoToken" => $content,
-    "slideCodeShow" => true,
-    "lang" => "zh_CN",
-    "TPL_redirect_url" => "https://www.taobao.com/",
-);
-// 发送登录请求
-requests::post($login_url, $params);
-// 登录成功后本框架会把Cookie保存到www.waduanzi.com域名下，我们可以看看是否是已经收集到Cookie了
-$cookies = requests::get_cookies("https://www.taobao.com/");
-// print_r($cookies);die;
-$url = "https://item.taobao.com/item.htm?spm=a21bz.7725273.1998564503.1.20573db8JtAdDA&id=556796189959&umpChannel=qianggou&u_channel=qianggou";
-$html = requests::get($url);
-var_dump($html);
-die;
 $configs = array(
     'name' => '13384美女图',
     'tasknum' => 1,
