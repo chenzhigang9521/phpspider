@@ -25,3 +25,19 @@ print_r($cookies);  // 可以看到已经输出Cookie数组结构
 $url = "http://www.waduanzi.com/member";
 $html = requests::get($url);
 echo $html;     // 可以看到登录后的页面，非常棒👍
+
+
+// $header = [
+//     'X-Requested-With' => 'XMLHttpRequest',
+//     'Referer' => 'http://www.mafengwo.cn/mdd/citylist/21536.html',
+//     'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+// ];
+// $params = [
+//     'mddid' => 21536,
+//     'page' => 2,
+// ];
+// $html = requests::post('http://www.mafengwo.cn/mdd/base/list/pagedata_citylist', $params, [], true, null, $header);
+// $html = json_decode($html, true);
+// $html = $html['list'];
+// $content = selector::select($html, '//div[@class="title"]');
+// var_dump($content);die;
