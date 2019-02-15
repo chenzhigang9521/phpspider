@@ -16,7 +16,7 @@
         'www.mafengwo.cn'
     ),
     'scan_urls' => array(
-        "http://www.mafengwo.cn/mdd/citylist/21536.html",            // 随便定义一个入口，要不然会报没有入口url错误，但是这里其实没用
+        "http://www.mafengwo.cn",            // 随便定义一个入口，要不然会报没有入口url错误，但是这里其实没用
     ),
     'list_url_regexes' => array(
         "http://www.mafengwo.cn/mdd/base/list/pagedata_citylist",         // 城市列表页
@@ -32,6 +32,8 @@
         'pass'  => '123456',
         'name'  => 'phpsider',
     ),
+    'list_url_regexes' => ['x'],
+    'content_url_regexes' => ['x'],
     'fields' => array(
         // 标题
         array(
@@ -66,6 +68,7 @@
             $url = "http://www.mafengwo.cn/mdd/base/list/pagedata_citylist";
             $options = array(
             'method' => 'post',
+            'url_type' => 'list_page',
             'params' => array(
                 'mddid' => 21536,
                 'page' => $i,
@@ -99,6 +102,7 @@
                     $url = "http://www.mafengwo.cn/gonglve/ajax.php?act=get_travellist&mddid={$v}";
                     $options = array(
                     'method' => 'post',
+                    'url_type' => 'content_page',
                     'params' => array(
                         'mddid' => $v,
                         'pageid' => 'mdd_index',
