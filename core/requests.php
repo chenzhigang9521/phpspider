@@ -908,4 +908,19 @@ class requests
         }
         return $html;
     }
+
+    public static function decodeIfNecessary($string)
+    {
+        if (is_array($string)) {
+            return $string;
+        }
+        if (empty($string) && $string != 0) {
+            return [];
+        }
+        $decoded = json_decode($string, true);
+        if (json_last_error() != JSON_ERROR_NONE || (!is_array($decoded) && !is_string($decoded))) {
+            return $string;
+        }
+        return $decoded;
+    }
 }

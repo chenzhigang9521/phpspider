@@ -497,10 +497,10 @@ class phpspider
         $link['url_type'] = 'scan_page';
         $link             = $this->link_uncompress($link);
 
-        if ($this->is_content_page($url)) {
+        if (!isset($link['url_type']) && $this->is_content_page($url)) {
             $link['url_type'] = 'content_page';
             $status           = $this->queue_lpush($link, $allowed_repeat);
-        } elseif ($this->is_list_page($url)) {
+        } elseif (!isset($link['url_type']) && $this->is_list_page($url)) {
             $link['url_type'] = 'list_page';
             $status           = $this->queue_lpush($link, $allowed_repeat);
         } else {
@@ -549,10 +549,12 @@ class phpspider
         $link['depth'] = $depth;
         $link = $this->link_uncompress($link);
 
-        if ($this->is_content_page($url)) {
+        if ((!isset($link['url_type']) && $this->is_content_page($url)) ||
+            (isset($link['url_type']) && $link['url_type'] == 'content_page')) {
             $link['url_type'] = 'content_page';
             $status           = $this->queue_lpush($link);
-        } elseif ($this->is_list_page($url)) {
+        } elseif ((!isset($link['url_type']) && $this->is_list_page($url)) ||
+            (isset($link['url_type']) && $link['url_type'] == 'list_page')) {
             $link['url_type'] = 'list_page';
             $status           = $this->queue_lpush($link);
         }
@@ -1278,7 +1280,6 @@ class phpspider
                 if (isset($return)) {
                     $is_find_url = $return;
                 }
-
                 unset($return);
             }
         } elseif ($link['url_type'] == 'content_page') {
@@ -1307,9 +1308,7 @@ class phpspider
                 $this->get_urls($page['raw'], $url, $link['depth'] + 1);
             }
         }
-
-        // 如果是内容页, 分析提取HTML页面中的字段
-        // 列表页也可以提取数据的, source_type: urlcontext, 未实现
+        
         if ($link['url_type'] == 'content_page') {
             $this->get_html_fields($page['raw'], $url, $page);
         }
@@ -1381,6 +1380,8 @@ class phpspider
         $method = ($method == 'post') ? 'post' : 'get';
         $params = empty($link['params']) ? array() : $link['params'];
         $html = requests::$method($url, $params);
+        $html = requests::decodeIfNecessary($html);
+        is_array($html) && $html = $html['list'];
         // 此url附加的数据不为空, 比如内容页需要列表页一些数据, 拼接到后面去
         if ($html && !empty($link['context_data'])) {
             $html .= $link['context_data'];
@@ -1916,16 +1917,11 @@ class phpspider
                 //$fields[$conf['name']] = array();
             } else {
                 if (is_array($values)) {
-                    if ($repeated) {
-                        $fields[$conf['name']] = $values;
-                    } else {
-                        $fields[$conf['name']] = $values[0];
-                    }
+                    // 不重复抽取则只取第一个元素
+                    $fields[$conf['name']] = $repeated ? $values : $values[0];
                 } else {
                     $fields[$conf['name']] = $values;
                 }
-                // 不重复抽取则只取第一个元素
-                //$fields[$conf['name']] = $repeated ? $values : $values[0];
             }
         }
 
