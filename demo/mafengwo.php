@@ -10,7 +10,6 @@
 $configs = array(
     'name' => '马蜂窝',
     'tasknum' => 1,
-    //'save_running_state' => true,
     'log_show' => true,
     'domains' => array(
         'www.mafengwo.cn'
@@ -21,10 +20,11 @@ $configs = array(
     'list_url_regexes' => array(
         "http://www.mafengwo.cn/mdd/base/list/pagedata_citylist",         // 城市列表页
     ),
-    // 'export' => array(
-    //     'type' => 'db',
-    //     'table' => 'mafengwo_content',
-    // ),
+    'export' => array(
+        'type' => 'csv',
+        'table' => 'mafengwo_content',
+        'file' => '/Users/zhigang/Desktop/work/project_code/phpspider/test.csv'
+    ),
     'db_config' => array(
         'host'  => '127.0.0.1',
         'port'  => 3306,

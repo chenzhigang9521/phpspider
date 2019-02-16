@@ -16,7 +16,7 @@ $configs = array(
     'name' => '糗事百科',
     'log_show' => true,
     'tasknum' => 1,
-    'save_running_state' => true,
+    // 'save_running_state' => true,
     'domains' => array(
         'qiushibaike.com',
         'www.qiushibaike.com'
@@ -30,37 +30,17 @@ $configs = array(
     'content_url_regexes' => array(
         "http://www.qiushibaike.com/article/\d+",
     ),
-    'max_try' => 5,
-    //'proxies' => array(
-        //'http://H784U84R444YABQD:57A8B0B743F9B4D2@proxy.abuyun.com:9010'
-    //),
-    //'export' => array(
-        //'type' => 'csv',
-        //'file' => '../data/qiushibaike.csv',
-    //),
-    //'export' => array(
-        //'type'  => 'sql',
-        //'file'  => '../data/qiushibaike.sql',
-        //'table' => 'content',
-    //),
-    //'export' => array(
-        //'type' => 'db', 
-        //'table' => 'content',
-    //),
-    //'db_config' => array(
-        //'host'  => '127.0.0.1',
-        //'port'  => 3306,
-        //'user'  => 'root',
-        //'pass'  => 'root',
-        //'name'  => 'qiushibaike',
-    //),
-    'queue_config' => array(
-        'host'      => '127.0.0.1',
-        'port'      => 6379,
-        'pass'      => 'foobared',
-        'db'        => 5,
-        'prefix'    => 'phpspider',
-        'timeout'   => 30,
+    'export' => array(
+        'type' => 'csv',
+        'table' => 'mafengwo_content',
+        'file' => '/Users/zhigang/Desktop/work/project_code/phpspider/test.csv'
+    ),
+    'db_config' => array(
+        'host'  => '127.0.0.1',
+        'port'  => 3306,
+        'user'  => 'root',
+        'pass'  => '123456',
+        'name'  => 'phpsider',
     ),
     'fields' => array(
         array(
@@ -98,61 +78,33 @@ $configs = array(
 
 $spider = new phpspider($configs);
 
-$spider->on_handle_img = function($fieldname, $img) 
-{
+$spider->on_handle_img = function ($fieldname, $img) {
     $regex = '/src="(https?:\/\/.*?)"/i';
     preg_match($regex, $img, $rs);
-    if (!$rs) 
-    {
+    if (!$rs) {
         return $img;
     }
 
     $url = $rs[1];
     $img = $url;
-
-    //$pathinfo = pathinfo($url);
-    //$fileext = $pathinfo['extension'];
-    //if (strtolower($fileext) == 'jpeg') 
-    //{
-        //$fileext = 'jpg';
-    //}
-    //// 以纳秒为单位生成随机数
-    //$filename = uniqid().".".$fileext;
-    //// 在data目录下生成图片
-    //$filepath = PATH_ROOT."/images/{$filename}";
-    //// 用系统自带的下载器wget下载
-    //exec("wget -q {$url} -O {$filepath}");
-
-    //// 替换成真是图片url
-    //$img = str_replace($url, $filename, $img);
     return $img;
 };
 
-$spider->on_extract_field = function($fieldname, $data, $page) 
-{
-    if ($fieldname == 'article_title') 
-    {
-        if (strlen($data) > 10) 
-        {
+$spider->on_extract_field = function ($fieldname, $data, $page) {
+    if ($fieldname == 'article_title') {
+        if (strlen($data) > 10) {
             // 下面方法截取中文会有异常
             //$data = substr($data, 0, 10)."...";
             $data = mb_substr($data, 0, 10, 'UTF-8')."...";
             $data = trim($data);
         }
-    }
-    elseif ($fieldname == 'article_publish_time') 
-    {
+    } elseif ($fieldname == 'article_publish_time') {
         // 用当前采集时间戳作为发布时间
         $data = time();
-    }
-    // 把当前内容页URL替换上面的field
-    elseif ($fieldname == 'url') 
-    {
+    } elseif ($fieldname == 'url') { // 把当前内容页URL替换上面的field
         $data = $page['url'];
     }
     return $data;
 };
 
 $spider->start();
-
-
